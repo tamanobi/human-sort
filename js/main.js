@@ -31,38 +31,53 @@ class Sorting {
 
 }
 
+function afterSwap(stack, p, h, l, M){
+    if ( p - 1 > l ) {
+        stack.push(l);
+        stack.push(p - 1);
+    }
+
+    if ( p + 1 < h &&
+         p + 1 < M // 打ち切り
+    ) {
+        stack.push(p + 1);
+        stack.push(h);
+    }
+}
+
+function compare(x, y) {
+    return (x <= y);
+}
+
+function afterCompare(result, arr, i, j) {
+    if (result) {
+        i++;
+        swap(arr, i, j);
+    }
+    return i;
+}
+
 function quickSortIterative (arr, l, h, M) {
     let stack = [];
     stack.push(l);
     stack.push(h);
-    while ( stack.length > 0 ) {
+    while (true) {
+        if (!(stack.length > 0)) break;
         h = stack.pop();
         l = stack.pop();
 
         let i = (l - 1);
-
-        for (let j = l; j <= h - 1; j++) {
-            let result = (arr[j] <= arr[h]);
-            if (result) {
-                i++;
-                swap(arr, i, j);
-            }
+        let j = l;
+        while (true) {
+            if (!(j <= h - 1)) break;
+            let result = compare(arr[j], arr[h]);
+            i = afterCompare(result, arr, i, j);
+            j++;
         }
         swap(arr, i + 1, h);
 
         let p = i + 1;
-        // afterSwap(stack, p, h, l, M);
-        if ( p - 1 > l ) {
-            stack.push(l);
-            stack.push(p - 1);
-        }
-
-        if ( p + 1 < h &&
-             p + 1 < M // 打ち切り
-        ) {
-            stack.push(p + 1);
-            stack.push(h);
-        }
+        afterSwap(stack, p, h, l, M);
     }
     return arr;
 }
