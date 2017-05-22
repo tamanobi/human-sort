@@ -32,45 +32,36 @@ class Sorting {
 }
 
 function quickSortIterative (arr, l, h, M) {
-    // Create an auxiliary stack
-    let stack = new Array( h - l + 1 );
-    // initialize top of stack
-    let top = -1;
-    // push initial values of l and h to stack
-    stack[ ++top ] = l;
-    stack[ ++top ] = h;
-    // Keep popping from stack while is not empty
-    while ( top >= 0 ) {
-        // Pop h and l
-        h = stack[ top-- ];
-        l = stack[ top-- ];
-        // Set pivot element at its correct position
-        // in sorted array
-        //let p = partition( arr, l, h );
+    let stack = [];
+    stack.push(l);
+    stack.push(h);
+    while ( stack.length > 0 ) {
+        h = stack.pop();
+        l = stack.pop();
 
-        let x = arr[h];
         let i = (l - 1);
 
         for (let j = l; j <= h - 1; j++) {
-            if (arr[j] <= x) {
+            let result = (arr[j] <= arr[h]);
+            if (result) {
                 i++;
-                swap (arr, i, j);
+                swap(arr, i, j);
             }
         }
-        swap (arr, i + 1, h);
-        let p = (i + 1);
+        swap(arr, i + 1, h);
 
-        // If there are elements on left side of pivot,
-        // then push left side to stack
-        if ( p-1 > l ) {
-            stack[ ++top ] = l;
-            stack[ ++top ] = p - 1;
+        let p = i + 1;
+        // afterSwap(stack, p, h, l, M);
+        if ( p - 1 > l ) {
+            stack.push(l);
+            stack.push(p - 1);
         }
-        // If there are elements on right side of pivot,
-        // then push right side to stack
-        if ( p+1 < h && p + 1 < M) {
-            stack[ ++top ] = p + 1;
-            stack[ ++top ] = h;
+
+        if ( p + 1 < h &&
+             p + 1 < M // 打ち切り
+        ) {
+            stack.push(p + 1);
+            stack.push(h);
         }
     }
     return arr;
