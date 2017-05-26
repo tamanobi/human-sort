@@ -81,7 +81,8 @@ function quickSortIterative (arr, l, h, M) {
     }
     return arr;
 }
-
+// 理想的なi/f
+// good(index); -> nextProcess();
 
 function swap(arr, i, j) {
         let tmp = arr[i];
